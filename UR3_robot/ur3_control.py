@@ -118,7 +118,13 @@ if clientID != -1:
     time.sleep(1)
     
     delta_t = 0.1 # intervalo de tempo usado para a integração numérica
-        
+    error1 = []
+    error2 = []
+    error3 = []
+    error4 = []
+    error5 = []
+    error6 = []
+     
     while True:
         # lendo valores das juntas
         erro, q1 = sim.simxGetJointPosition(clientID, Joint1, sim.simx_opmode_buffer)
@@ -147,6 +153,17 @@ if clientID != -1:
         
         q_dot = J_inv @ v                
         q += q_dot*(delta_t)
+        
+        # salvando erros para o plot
+        
+        error1.append(q_dot[0])
+        error2.append(q_dot[1])
+        error3.append(q_dot[2])
+        error4.append(q_dot[3])
+        error5.append(q_dot[4])
+        error6.append(q_dot[5])
+        
+        np.save('ur3_errors.npy', np.array([error1, error2, error3, error4, error5, error6]))
         
         sim.simxSetJointTargetPosition(clientID, Joint1, q[0], sim.simx_opmode_oneshot)
         time.sleep(0.05)
