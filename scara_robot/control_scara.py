@@ -84,16 +84,11 @@ if clientID != -1:
     erro, X = sim.simxGetObjectPosition(clientID, pad, -1, sim.simx_opmode_streaming)
     time.sleep(1)
     
-    # Atribuindo valores iniciais às juntas do robô
-    sim.simxSetJointPosition(clientID, baseJoint, 0, sim.simx_opmode_oneshot)
-    time.sleep(0.05)    
-    sim.simxSetJointPosition(clientID, armJoint, 0, sim.simx_opmode_oneshot)
-    time.sleep(0.05)
-    sim.simxSetJointPosition(clientID, armJoint2, 0, sim.simx_opmode_oneshot)
-    time.sleep(0.05)    
-    time.sleep(1)
-    
     delta_t = 0.5 # intervalo de tempo usado para a integração numérica
+    error1 = []
+    error2 = []
+    error3 = []
+    error4 = []
         
     while True:
         # lendo valores das juntas
@@ -121,6 +116,15 @@ if clientID != -1:
         q_dot = J_inv @ v                
         q += q_dot*(delta_t)
         
+        # saving errors for plotting
+                
+        error1.append(q_dot[0])
+        error2.append(q_dot[1])
+        error3.append(q_dot[2])
+        error4.append(q_dot[3])
+        
+        np.save('scara_errors.npy', np.array([error1, error2, error3, error4]))
+        
         sim.simxSetJointPosition(clientID, baseJoint, q[0], sim.simx_opmode_oneshot)
         time.sleep(0.05)
         
@@ -131,16 +135,7 @@ if clientID != -1:
         time.sleep(0.05)
         
         time.sleep(0.05)
-        
-        # break
-        
-        
-    # Pause simulation
-    sim.simxPauseSimulation(clientID,sim.simx_opmode_oneshot_wait)
-
-    # Close connection:
-    sim.simxAddStatusbarMessage(clientID, 'Program paused', sim.simx_opmode_blocking )
-    sim.simxFinish(clientID)
+                
 else:
     print ('Failed connecting to remote API server')
 print ('Program ended')
