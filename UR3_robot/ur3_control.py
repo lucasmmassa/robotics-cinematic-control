@@ -58,7 +58,7 @@ robot = DHRobot([
     RevoluteDH(a=a2, d=d2, alpha=alpha2, offset=-pi/2),
     RevoluteDH(a=a3, d=d3, alpha=alpha3),
     RevoluteDH(a=a4, d=d4, alpha=alpha4, offset=-pi/2),
-    RevoluteDH(a=a5, d=d5, alpha=alpha5),
+    RevoluteDH(a=a5, d=d5, alpha=alpha5, offset=pi),
     RevoluteDH(a=a6, d=d6, alpha=alpha6, offset=-pi/2)
 ])
 
